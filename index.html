@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Content Security Policy para proteção contra XSS -->
+  <!-- Content Security Policy - proteção contra XSS -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' https: data: blob:;
+    font-src 'self';
+    connect-src 'self' https://*.supabase.co;
+  " />
+  <!-- Headers de segurança -->
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  
+  <title>Galeria de Fotografias</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/gallery.css" />
+  
+  <!-- Supabase CDN (sem SRI porque versão pode mudar) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-container">
+      <div class="header-content">
+        <h1>Galeria de Fotografias</h1>
+        <p>Uma interface simples e responsiva para mostrar imagens.</p>
+      </div>
+      <div class="header-actions">
+        <!-- Área de autenticação -->
+        <div id="auth-user-info" class="auth-user-info" style="display: none;"></div>
+        <button id="auth-login-btn" class="icon-button" title="Fazer login">✎ Login</button>
+        <button id="auth-logout-btn" class="icon-button" title="Fazer logout" style="display: none;">Logout</button>
+        
+        <!-- Botão para adicionar imagem -->
+        <a href="#" class="icon-button" title="Adicionar nova imagem" id="add-image-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14"/>
+            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Loading State -->
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>A carregar imagens...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="error" style="display: none;">
+      <p>Erro ao carregar as imagens. Por favor, tente novamente.</p>
+      <button id="error-reload-btn" class="error-btn">Recarregar</button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <section class="gallery" id="gallery">
+      <!-- A galeria será gerada dinamicamente -->
+    </section>
+
+    <!-- indicador de carregamento adicional para scroll infinito -->
+    <div id="loading-more" class="loading" style="display: none;">
+      <div class="spinner small"></div>
+      <p>Carregando mais imagens...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty" class="empty-state" style="display: none;">
+      <p>Nenhuma imagem encontrada.</p>
+    </div>
+  </main>
+
+  <!-- Lightbox / Modal -->
+  <div id="modal" class="lightbox" style="display: none;" aria-hidden="true">
+    <button class="lb-close" id="lb-close" aria-label="Fechar">×</button>
+    <button class="lb-prev" id="lb-prev" aria-label="Anterior">‹</button>
+    <img id="modal-image" src="" alt="" />
+    <button class="lb-next" id="lb-next" aria-label="Próxima">›</button>
+    <div class="lb-info">
+      <div class="modal-info">
+        <h2 id="modal-title"></h2>
+        <p id="modal-description"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts - ordem importante: config PRIMEIRO, depois API, depois resto -->
+  <script src="js/config.js"></script>
+  <script src="api/supabase.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/lightbox.js"></script>
+  <script src="js/init.js"></script>
+</body>
+</html>
